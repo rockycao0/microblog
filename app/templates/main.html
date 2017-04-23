@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+    <title>microblog</title>
+    <!-- 包含头部信息用于适应不同设备 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 包含 bootstrap 样式表 -->
+    <link rel="stylesheet" href="https://apps.bdimg.com/libs/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <a href="publish/",text="publish">publish</a>
+    <div class="user">
+        <p>{{user}}</p>
+    </div>
+    <div class="container">
+      <h2>noting to assure</h2>
+        {% for content in content_list %}
+        {%for blog in content.all %}
+        <p>{{blog.UID.name}}</p>
+        <p>{{blog.text}}</p>
+        <p></p>
+        <div class="dropdown">
+            <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">评论
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            {% for comm in blog.owner.all %}
+                <li role="presentation">
+                    <p> {{comm.text}}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+
+
+    <!-- JavaScript 放置在文档最后面可以使页面加载速度更快 -->
+
+
+      <!-- 可选: 包含 jQuery 库 -->
+    <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- 可选: 合并了 Bootstrap JavaScript 插件 -->
+    <script src="https://apps.bdimg.com/libs/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+
+</html>
