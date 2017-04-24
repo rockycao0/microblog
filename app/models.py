@@ -7,6 +7,7 @@ class Content(models.Model):
     date = models.DateField(auto_now_add=True)
     up_num = models.IntegerField(default=0)
     UID = models.ForeignKey('account.User',on_delete=models.CASCADE,related_name='owner')
+    UP = models.ForeignKey('account.User',related_name="uop_cer",null=True)
     def __str__(self):
         return self.text
 
@@ -16,11 +17,8 @@ class  Comment(models.Model):
     date = models.DateField(auto_now_add=True)
     up_num = models.IntegerField(default=0)
     CID = models.ForeignKey('Content',on_delete=models.CASCADE,related_name='owner')
+    UP = models.ForeignKey('account.User',null=True,on_delete=models.CASCADE,related_name="up_co")
     def __str__(self):
         return self.text
 
 
-class UP(models.Model):
-    CID = models.CharField(max_length=140)
-    UID = models.CharField(max_length=100)
-    date = models.DateField(auto_now_add=True)

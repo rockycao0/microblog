@@ -43,7 +43,7 @@ def publish(request):
             Content.objects.create(text=text,UID = user)
             return HttpResponseRedirect("main.html")
         else:
-            return HttpResponse("<p>invalid input")
+            return HttpResponse("<p>invalid input</p>")
     else:
         cont = blog()
         return render_to_response("publish.html",{'comm':cont})
