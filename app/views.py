@@ -41,7 +41,7 @@ def publish(request):
             user = User.objects.get(name = name)
             text = cont.cleaned_data["text"]
             Content.objects.create(text=text,UID = user)
-            return HttpResponse("well done")
+            return HttpResponseRedirect("main.html")
         else:
             return HttpResponse("<p>invalid input")
     else:
