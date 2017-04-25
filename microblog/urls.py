@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from account.views import register,login
-from app.views import main,publish,up
+from app.views import main,publish,up,follow,comment
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,5 +24,7 @@ urlpatterns = [
     url(r'^main/$',main),
     url(r'^login/',login),
     url(r'^main/publish/', publish),
-    url(r'^main/(?P<CID>\d+)/$', up, name='up_link')
+    url(r'^main/(?P<CID>\d+)/$', up, name='up_link'),
+    url(r'^main/(?P<favor>\w+)/favor/$',follow,name = 'follow_link'),
+    url(r'^main/(?P<CID>\d+)/comment/$', comment, name='comment_link'),
 ]

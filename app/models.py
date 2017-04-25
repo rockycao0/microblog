@@ -7,7 +7,7 @@ class Content(models.Model):
     date = models.DateField(auto_now_add=True)
     up_num = models.IntegerField(default=0)
     UID = models.ForeignKey('account.User',on_delete=models.CASCADE,related_name='owner')
-    UP = models.ForeignKey('account.User',related_name="uop_cer",null=True)
+    UP = models.ManyToManyField('account.User',related_name='con_up')
     def __str__(self):
         return self.text
 
@@ -17,7 +17,7 @@ class  Comment(models.Model):
     date = models.DateField(auto_now_add=True)
     up_num = models.IntegerField(default=0)
     CID = models.ForeignKey('Content',on_delete=models.CASCADE,related_name='owner')
-    UP = models.ForeignKey('account.User',null=True,on_delete=models.CASCADE,related_name="up_co")
+    UP = models.ManyToManyField('account.User',related_name='com_up')
     def __str__(self):
         return self.text
 

@@ -16,7 +16,7 @@ class UserForm(forms.Form):
  username = forms.CharField(label='用户名',max_length=100)
  password1 = forms.CharField(label='密码',widget=forms.PasswordInput())
  password2 = forms.CharField(label='确认密码',widget=forms.PasswordInput())
- email = forms.EmailField(label='电子邮件')
+
 
 def login(request):
     if request.method == 'POST':
@@ -28,7 +28,7 @@ def login(request):
             if(len(userResult)>0):
                 request.session['UID'] = username
                 request.session['status']= True
-                return render_to_response('success.html',{'operatiorn':'Login'})
+                return HttpResponseRedirect('/main/')
             else:
                 return HttpResponse("wrong password")
         else:
@@ -38,7 +38,6 @@ def login(request):
         return render_to_response('Userlogin.html',{'uf':uf})
 
 def register(request):
-    curtime=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
     if request.method=='POST':
         uf = UserForm(request.POST)
         if uf.is_valid():
@@ -55,10 +54,9 @@ def register(request):
                     return render_to_response('register.html',{'errors':errors})
                 else:
                     password = password1
-                    email = uf.cleaned_data['email']
                     user = User.objects.create(name=user,password=password)
                     user.save()
-                    return render_to_response('success.html',{'username':user,'operation':"rigester"})
+                    return HttpResponseRedirect('/login/')
 
     else:
         uf=UserForm()

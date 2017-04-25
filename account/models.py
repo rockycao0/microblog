@@ -4,9 +4,8 @@ from django.db import models
 class User(models.Model):
     name = models.CharField(max_length=30)
     password = models.CharField(max_length=8)
-    email = models.EmailField(default='123@123.com')
-    followed_user = models.ForeignKey('User',on_delete=models.CASCADE,related_name='follower',null=True)
-    follower_user = models.ForeignKey('User',on_delete=models.CASCADE,related_name='follow',null=True)
+    followed_user = models.ManyToManyField('User',related_name='follow',default="")
+    follower_user = models.ManyToManyField('User',related_name='follower',default="")
 
     def __str__(self):
         return self.name

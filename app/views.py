@@ -22,13 +22,19 @@ def main(request):
         user = User.objects.get(name=name)
         star =user.follow.all()
         star = star | User.objects.filter(name=name)
-        content_list=[]
+        content_list=User.objects.none()
         for x in star:
-            content_list.append(x.owner.all())
+            content_list = content_list | x.owner.all()
+        if len(content_list)<10:
+            t = 10-len(content_list)
+            content_list = content_list | Content.objects.order_by()[:t]
+            print(content_list)
     else:
         content_list = Content.objects.order_by()[:10]
 
-    return render_to_response('main.html',{'user':name,'content_list':content_list})
+    content_list = content_list.distinct()
+    return render_to_response('main.html',{'user':name,'content_list':content_list.order_by('-date')})
+
 
 def publish(request):
     try:
@@ -41,7 +47,7 @@ def publish(request):
             user = User.objects.get(name = name)
             text = cont.cleaned_data["text"]
             Content.objects.create(text=text,UID = user)
-            return HttpResponseRedirect("main.html")
+            return HttpResponseRedirect("/main/")
         else:
             return HttpResponse("<p>invalid input</p>")
     else:
@@ -56,6 +62,36 @@ def up(request,CID):
         return HttpResponseRedirect("Userlogin.html")
     user = User.objects.get(name=name)
     content =  Content.objects.get(id= CID)
-    print(type(content.UP),content.UP)
     content.UP.add(user)
+    return HttpResponse("well done")
 
+def follow(request,favor):
+    try:
+        name = request.session.get('UID')
+    except:
+        HttpResponseRedirect("Userlogin.html")
+    user = User.objects.get(name=name)
+    target = User.objects.get(name = favor)
+    user.follow.add(target)
+    target.follower.add(user)
+    return HttpResponse("well done")
+
+def comment(request,CID):
+    try:
+        name = request.session.get('UID')
+    except:
+        HttpResponseRedirect("Userlogin.html")
+    content = Content.objects.get(id = CID)
+    if request.method == "POST":
+        com = blog(request.POST)
+        if com.is_valid():
+            user = User.objects.get(name = name)
+            text = com.cleaned_data["text"]
+            Comment.objects.create(text=text,UID = user,CID = content)
+            return HttpResponseRedirect("/main/")
+        else:
+            return HttpResponse("<p>invalid input</p>")
+    else:
+        com = blog()
+        return render_to_response("publish.html",{'comm':com})
+    return HttpResponse("well done")

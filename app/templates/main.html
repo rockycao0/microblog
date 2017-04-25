@@ -17,26 +17,23 @@
     <div class="container">
       <h2>noting to assure</h2>
         {% for content in content_list %}
-        {%for blog in content.all %}
-        <p>{{blog.UID.name}}</p>
-        <p>{{blog.text}}</p>
+        <p><a href="{% url 'follow_link' content.UID.name %}">{{content.UID.name}}</a></p>
+        <p>{{content.text}}</p>
         <p></p>
         <div class="dropdown">
             <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">评论
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            {% for comm in blog.owner.all %}
+            <ul class="dropdown" role="menu" aria-labelledby="dropdownMenu1">
+            {% for comm in content.owner.all %}
                 <li role="presentation">
                     <p> {{comm.text}}</p>
                 </li>
             {% endfor %}
+                <li><a href="{% url 'comment_link' content.id %}",target = "_blank">comment</a></li>
             </ul>
-            <ul>
-                <li><a href="{% url 'up_link' blog.id %}",target="_blank" >up</a></li>
-            </ul>
+            <p><a href="{% url 'up_link' content.id %}", target="_blank" >up {{ content.UP.count }}</a></p>
         </div>
-        {% endfor %}
         {% endfor %}
     </div>
 
