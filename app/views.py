@@ -26,7 +26,7 @@ def main(request):
         for x in star:
             content_list.append(x.owner.all())
     else:
-        content = Content.objects.order_by()[:10]
+        content_list = Content.objects.order_by()[:10]
 
     return render_to_response('main.html',{'user':name,'content_list':content_list})
 
@@ -47,4 +47,15 @@ def publish(request):
     else:
         cont = blog()
         return render_to_response("publish.html",{'comm':cont})
+
+
+def up(request,CID):
+    try:
+        name = request.session.get('UID')
+    except:
+        return HttpResponseRedirect("Userlogin.html")
+    user = User.objects.get(name=name)
+    content =  Content.objects.get(id= CID)
+    print(type(content.UP),content.UP)
+    content.UP.add(user)
 

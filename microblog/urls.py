@@ -16,12 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from account.views import register,login
-from app.views import main,publish
+from app.views import main,publish,up
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^register/',register),
     url(r'^main/$',main),
     url(r'^login/',login),
-    url(r'^main/publish/',publish)
+    url(r'^main/publish/', publish),
+    url(r'^main/(?P<CID>\d+)/$', up, name='up_link')
 ]
