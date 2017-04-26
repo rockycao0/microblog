@@ -8,6 +8,8 @@ from .models import Content, Comment
 
 class blog(forms.Form):
     text = forms.CharField(label='正文',max_length=140)
+
+
 class comment(forms.Form):
     text = forms.CharField(label='评论',max_length=100)
 
@@ -15,11 +17,11 @@ class comment(forms.Form):
 def main(request):
     try :
         name=request.session.get('UID')
+        user = User.objects.get(name=name)
         mod = 'user'
     except:
         mod = 'passenger'
-    if(mod=='user'):
-        user = User.objects.get(name=name)
+    if(mod == 'user'):
         star =user.follow.all()
         star = star | User.objects.filter(name=name)
         content_list=User.objects.none()
@@ -33,7 +35,7 @@ def main(request):
         content_list = Content.objects.order_by()[:10]
 
     content_list = content_list.distinct()
-    return render_to_response('main.html',{'user':name,'content_list':content_list.order_by('-date')})
+    return render_to_response('main.html', {'user' : name, 'content_list' : content_list.order_by('-id')})
 
 
 def publish(request):
