@@ -31,11 +31,12 @@ def main(request):
             t = 10-len(content_list)
             content_list = content_list | Content.objects.order_by()[:t]
             print(content_list)
+        content_list = content_list.distinct()
     else:
         content_list = Content.objects.order_by()[:10]
 
-    content_list = content_list.distinct()
-    return render_to_response('main.html', {'user' : name, 'content_list' : content_list.order_by('-id')})
+    #return render_to_response('main.html', {'user' : user, 'content_list' : content_list.order_by('-id')})
+    return render_to_response('blog.html', {'user': user, 'content_list': content_list.order_by('-id')})
 
 
 def publish(request):
