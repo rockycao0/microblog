@@ -41,7 +41,7 @@
                     <a href="../../main"><i class="fa fa-smile-o"></i> <span class="nav-label">我的首页 </span><span class="label label-warning pull-right"></span></a>
                 </li>
                 <li class="landing_link">
-                    <a target="_blank" href="{% url 'hot' %}"><i class="fa fa-star"></i> <span class="nav-label">热门</span> <span class="label label-warning pull-right">NEW</span></a>
+                    <a target="_blank" href="../../inspinia/landing.html"><i class="fa fa-star"></i> <span class="nav-label">热门</span> <span class="label label-warning pull-right">NEW</span></a>
                 </li>
             </ul>
 
@@ -69,7 +69,7 @@
                 </li>
                 <li>
                     <a href="../../login">
-                        <i class="fa fa-sign-out"></i> Log
+                        <i class="fa fa-sign-out"></i> Log out
                     </a>
                 </li>
             </ul>
@@ -86,17 +86,6 @@
             </div>
 <!-- target 1 -->
         <div class="wrapper wrapper-content  animated fadeInRight blog">
-            <div class="row">
-                <div class="ibox">
-                <div class="col-md-12-column">
-                    <form method = 'post' enctype="multipart/form-data" width=400 height=300 >
-                        {% for field in comm %}
-                        {{field}}
-                        {% endfor %}
-                        <div class="text-right"><button type="submit" class="btn btn-primary block m-b">发布</button></div>
-                    </form>
-                </div></div>
-            </div>
             <div class="row">
                 {% for content in content_list %}
                 <div class="ibox">
@@ -162,5 +151,5 @@
     <script src="../../inspinia/js/plugins/pace/pace.min.js"></script>
 
 </body>
-
+</body>
 </html>

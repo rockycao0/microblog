@@ -9,13 +9,14 @@ import pdb
 
 # Create your views here.
 class UserFormLogin(forms.Form):
- username = forms.CharField(label='用户名',max_length=100)
- pw = forms.CharField(label='密码',max_length=16)
+ username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class':"form-control", 'placeholder': "用户名"}))
+ pw = forms.CharField(max_length=16, widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': "密码"}))
+
 
 class UserForm(forms.Form):
- username = forms.CharField(label='用户名',max_length=100)
- password1 = forms.CharField(label='密码',widget=forms.PasswordInput())
- password2 = forms.CharField(label='确认密码',widget=forms.PasswordInput())
+ username = forms.CharField(label='用户名', max_length=100, widget=forms.TextInput(attrs={'class':"form-control", 'placeholder': "用户名"}))
+ password1 = forms.CharField(label='密码', widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': "密码"}))
+ password2 = forms.CharField(label='确认密码', widget=forms.TextInput(attrs={'class': "form-control", 'placeholder': "确认密码"}))
 
 
 def login(request):
@@ -32,10 +33,16 @@ def login(request):
             else:
                 return HttpResponse("wrong password")
         else:
+
             return HttpResponse("invalid user")
     else:
+        try:
+            del request.session['UID']
+            request.session['status'] = False
+        except:
+            request.session['status'] = False
         uf = UserFormLogin()
-        return render_to_response('Userlogin.html',{'uf':uf})
+        return render_to_response('login.html',{'uf':uf})
 
 def register(request):
     if request.method=='POST':

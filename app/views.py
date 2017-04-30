@@ -7,7 +7,7 @@ from .models import Content, Comment
 
 
 class blog(forms.Form):
-    text = forms.CharField(label='正文',max_length=140, widget=forms.Textarea)
+    text = forms.CharField(label='正文',max_length=140, widget=forms.Textarea(attrs={'style': 'height: 200px;width:600px'}))
 class comm(forms.Form):
     text = forms.CharField(label='正文',max_length=140)
 
@@ -39,12 +39,20 @@ def main(request):
             t = 10-len(content_list)
             content_list = content_list | Content.objects.order_by()[:t]
         content_list = content_list.distinct()
+        return render_to_response('blog.html',
+                                  {'user': user, 'content_list': content_list.order_by('-id'), 'comm': cont})
     else:
-        content_list = Content.objects.order_by()[:10]
+        return HttpResponseRedirect("/hot/")
 
-    return render_to_response('blog.html', {'user': user, 'content_list': content_list.order_by('-id'), 'comm': cont})
-
-
+def hot(request):
+    content_list = Content.objects.all()
+    content_list=content_list.order_by('-up_num')
+    try:
+        name=request.session.get('UID')
+        user = User.objects.get(name=name)
+        return render_to_response('hot.html', {'user': user, 'content_list': content_list})
+    except:
+        return render_to_response('hot.html', {'content_list': content_list})
 
 
 
@@ -62,7 +70,7 @@ def follow(request,favor):
     try:
         name = request.session.get('UID')
     except:
-        HttpResponseRedirect("Userlogin.html")
+        HttpResponseRedirect("login.html")
     user = User.objects.get(name=name)
     target = User.objects.get(name = favor)
     user.follow.add(target)

@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from account.views import register,login
-from app.views import main,up,follow,comment,home
+from app.views import main,up,follow,comment,home,hot
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^main/(?P<favor>\w+)/favor/$',follow,name = 'follow_link'),
     url(r'^main/(?P<CID>\d+)/comment/$', comment, name='comment_link'),
     url(r'^(?P<uid>\d+)/home', home, name='home'),
+    url(r'^hot/', hot,name='hot'),
 ]
