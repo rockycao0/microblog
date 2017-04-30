@@ -7,11 +7,9 @@ from .models import Content, Comment
 
 
 class blog(forms.Form):
+    text = forms.CharField(label='正文',max_length=140, widget=forms.Textarea)
+class comm(forms.Form):
     text = forms.CharField(label='正文',max_length=140)
-
-
-class comment(forms.Form):
-    text = forms.CharField(label='评论',max_length=100)
 
 
 def main(request):
@@ -22,6 +20,16 @@ def main(request):
     except:
         mod = 'passenger'
     if(mod == 'user'):
+        if request.method == "POST":
+            cont = blog(request.POST)
+            if cont.is_valid():
+                text = cont.cleaned_data["text"]
+                Content.objects.create(text=text, UID=user)
+                return HttpResponseRedirect("/main/")
+            else:
+                return HttpResponse("<p>invalid input</p>")
+        else:
+            cont = blog()
         star =user.follow.all()
         star = star | User.objects.filter(name=name)
         content_list=User.objects.none()
@@ -30,32 +38,14 @@ def main(request):
         if len(content_list)<10:
             t = 10-len(content_list)
             content_list = content_list | Content.objects.order_by()[:t]
-            print(content_list)
         content_list = content_list.distinct()
     else:
         content_list = Content.objects.order_by()[:10]
 
-    #return render_to_response('main.html', {'user' : user, 'content_list' : content_list.order_by('-id')})
-    return render_to_response('blog.html', {'user': user, 'content_list': content_list.order_by('-id')})
+    return render_to_response('blog.html', {'user': user, 'content_list': content_list.order_by('-id'), 'comm': cont})
 
 
-def publish(request):
-    try:
-        name = request.session.get('UID')
-    except:
-        return HttpResponseRedirect("Userlogin.html")
-    if request.method == "POST":
-        cont = blog(request.POST)
-        if cont.is_valid():
-            user = User.objects.get(name = name)
-            text = cont.cleaned_data["text"]
-            Content.objects.create(text=text,UID = user)
-            return HttpResponseRedirect("/main/")
-        else:
-            return HttpResponse("<p>invalid input</p>")
-    else:
-        cont = blog()
-        return render_to_response("publish.html",{'comm':cont})
+
 
 
 def up(request,CID):
@@ -84,17 +74,22 @@ def comment(request,CID):
         name = request.session.get('UID')
     except:
         HttpResponseRedirect("Userlogin.html")
-    content = Content.objects.get(id = CID)
+    content = Content.objects.get(id=CID)
     if request.method == "POST":
-        com = blog(request.POST)
+        com = comm(request.POST)
         if com.is_valid():
-            user = User.objects.get(name = name)
+            user = User.objects.get(name=name)
             text = com.cleaned_data["text"]
-            Comment.objects.create(text=text,UID = user,CID = content)
-            return HttpResponseRedirect("/main/")
+            Comment.objects.create(text=text, UID=user, CID=content)
+            com = comm()
+            return render_to_response("article.html", {'comm': com, 'content': content})
         else:
-            return HttpResponse("<p>invalid input</p>")
+            return HttpResponse("<p>>invalid input</p")
     else:
-        com = blog()
-        return render_to_response("publish.html",{'comm':com})
-    return HttpResponse("well done")
+        com = comm()
+        return render_to_response("article.html", {'comm': com, 'content': content})
+
+def home(request,uid):
+    user = User.objects.get(id=uid)
+    content_list = user.owner.all()
+    return render_to_response('home.html', {'user': user, 'content_list': content_list.order_by('-id')})
