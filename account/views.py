@@ -29,7 +29,10 @@ def login(request):
             if(len(userResult)>0):
                 request.session['UID'] = username
                 request.session['status']= True
-                return HttpResponseRedirect('/main/')
+                if request.session['status']!='':
+                    return HttpResponseRedirect(request.session['frompage'])
+                else:
+                    return HttpResponseRedirect('/main/')
             else:
                 return HttpResponse("wrong password")
         else:

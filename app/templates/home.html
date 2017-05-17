@@ -38,10 +38,10 @@
                         </div>
                         <div >
                             {% if user %}
-                                    {% ifequal user content.UID %}
-                                        <button type="button" class="btn btn-danger"><a>delete</a></button>
+                                    {% ifequal user host %}
+                                        <button type="button" class="btn btn-danger"><a>setting</a></button>
                                     {%else %}
-                                    {% if content.UID in user.follow.all %}
+                                    {% if host in user.follow.all %}
                                         <button type="button" class="btn btn-warning"><a href="{% url 'unfollow_link' host.name %}">UnFollow</a></button>
                                     {% else %}
                                         <button type="button" class="btn btn-success"><a href="{% url 'follow_link' host.name %}">Follow</a></button>
@@ -107,10 +107,13 @@
             <div class="col-md-4 column">
                 <h3 style="color:white">关注列表</h3>
                 {% for people in host.follow.all %}
+                {% ifequal people host %}
+                {% else %}
                 <div class="ibox">
                     <div class="ibox-content">
-                        <p>{{people.name}}</p>
+                        <a href="{% url 'home' people.id %}" class="btn-link"><h3>{{people.name}}</h3></a>
                     </div></div>
+                {% endifequal %}
                 {% endfor %}
             </div>
         </div>

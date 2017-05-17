@@ -64,7 +64,11 @@
                 </li>
                 <li>
                     <a href="../../login">
+                        {% if user %}
                         <i class="fa fa-sign-out"></i> Log out
+                        {% else %}
+                        <i class="fa fa-sign-in"></i> Log in
+                        {% endif %}
                     </a>
                 </li>
             </ul>
@@ -107,16 +111,13 @@
                         <div class="small m-b-xs">
                             <span class="text-muted"><i class="fa fa-clock-o"></i> {{ content.date }}</span>
                         </div>
-                        <p>
-                            {{content.text}}
-                        </p>
                         <div class="row">
                             <div class="col-md-6">
-                                <i class="fa fa-eye"><a href="{% url 'up_link' content.id %}", target="_blank" > 赞 {{ content.UP.count }}</a></i>
+                                <i class="fa fa-eye"><a href="{% url 'up_link' content.id %}" > 赞 {{ content.UP.count }}</a></i>
                             </div>
                             <div class="col-md-6">
                                 <div class="text-right">
-                                    <div> <i class="fa fa-comments-o"> <a href="{% url 'comment_link' content.id %}",target = "_blank">评论 {{ content.owner.count }}</a></i></div>
+                                    <div> <i class="fa fa-comments-o"> <a href="{% url 'comment_link' content.id %}">评论 {{ content.owner.count }}</a></i></div>
                                 </div>
                             </div>
                         </div>
@@ -127,14 +128,7 @@
 
 
         </div>
-        <div class="footer">
-            <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
-            </div>
-            <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2015
-            </div>
-        </div>
+
 
         </div>
         </div>

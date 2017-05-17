@@ -31,10 +31,8 @@
         <div class="sidebar-collapse">
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
-                    <div class="dropdown profile-element"> <!--<span>
-                            <img alt="image" class="img-circle" src="../../inspinia/img/profile_small.jpg" />
-                             </span>-->
-                             <h1 style="color:white">{{user.name}}</h1>
+                    <div class="dropdown profile-element">
+                        <h1 style="color:white">{{user.name}}</h1>
                     </div>
                 </li>
                 <li class="landing_link">
@@ -64,7 +62,11 @@
                 </li>
                 <li>
                     <a href="../../login">
-                        <i class="fa fa-sign-out"></i> Log
+                        {% if user %}
+                        <i class="fa fa-sign-out"></i> Log out
+                        {% else %}
+                        <i class="fa fa-sign-in"></i> Log in
+                        {% endif %}
                     </a>
                 </li>
             </ul>
@@ -116,9 +118,6 @@
                                     {% endifequal %}
                                     {% endif %}
                                 </div>
-                                <div>
-                                    {{user.follow.all}}
-                                </div>
                             </div>
                         </div>
                         <div class="small m-b-xs">
@@ -129,7 +128,7 @@
                         </p>
                         <div class="row">
                             <div class="col-md-6">
-                                <i class="fa fa-eye"><a href="{% url 'up_link' content.id %}", target="_blank" > 赞 {{ content.UP.count }}</a></i>
+                                <i class="fa fa-eye"><a href="{% url 'up_link' content.id %}" > 赞 {{ content.UP.count }}</a></i>
                             </div>
                             <div class="col-md-6">
                                 <div class="text-right">
