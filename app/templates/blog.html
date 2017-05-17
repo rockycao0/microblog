@@ -31,17 +31,17 @@
         <div class="sidebar-collapse">
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
-                    <div class="dropdown profile-element"> <span>
+                    <div class="dropdown profile-element"> <!--<span>
                             <img alt="image" class="img-circle" src="../../inspinia/img/profile_small.jpg" />
-                             </span>
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{user.name}}</strong></span></span>
+                             </span>-->
+                             <h1 style="color:white">{{user.name}}</h1>
                     </div>
                 </li>
-                <li>
+                <li class="landing_link">
                     <a href="../../main"><i class="fa fa-smile-o"></i> <span class="nav-label">我的首页 </span><span class="label label-warning pull-right"></span></a>
                 </li>
-                <li class="landing_link">
-                    <a target="_blank" href="{% url 'hot' %}"><i class="fa fa-star"></i> <span class="nav-label">热门</span> <span class="label label-warning pull-right">NEW</span></a>
+                <li>
+                    <a href="{% url 'hot' %}"><i class="fa fa-star"></i> <span class="nav-label">热门</span> <span class="label label-warning pull-right">NEW</span></a>
                 </li>
             </ul>
 
@@ -61,11 +61,6 @@
             <ul class="nav navbar-top-links navbar-right">
                 <li>
                     <span class="m-r-sm text-muted welcome-message">microblog</span>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="blog.html#">
-                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
-                    </a>
                 </li>
                 <li>
                     <a href="../../login">
@@ -110,7 +105,19 @@
                             </div>
                             <div class="col-md-6 column">
                                 <div class="text-right">
-                                    <p><a href="{% url 'follow_link' content.UID.name %}">Follow</a></p>
+                                    {% if user %}
+                                    {% ifequal user content.UID %}
+                                    {%else %}
+                                    {% if content.UID in user.follow.all %}
+                                        <button type="button" class="btn btn-warning"><a href="{% url 'unfollow_link' content.UID.name %}">UnFollow</a></button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-success"><a href="{% url 'follow_link' content.UID.name %}">Follow</a></button>
+                                    {% endif %}
+                                    {% endifequal %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {{user.follow.all}}
                                 </div>
                             </div>
                         </div>

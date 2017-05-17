@@ -32,9 +32,7 @@
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="../../inspinia/img/profile_small.jpg" />
-                             </span>
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{user.name}}</strong></span></span>
+                         <h1 style="color:white">{{user.name}}</h1>
                     </div>
                 </li>
                 <li>
@@ -63,9 +61,6 @@
                     <span class="m-r-sm text-muted welcome-message">microblog</span>
                 </li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="blog.html#">
-                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
-                    </a>
                 </li>
                 <li>
                     <a href="../../login">
@@ -99,7 +94,13 @@
                             </div>
                             <div class="col-md-6 column">
                                 <div class="text-right">
-                                    <p><a href="{% url 'follow_link' content.UID.name %}">Follow</a></p>
+                                    {%if user %}
+                                    {% if content.UID in user.follow.all %}
+                                        <a href="{% url 'unfollow_link' content.UID.name %}" role="button" class="btn btn-warning">UnFollow</a>
+                                    {% else %}
+                                        <a href="{% url 'follow_link' content.UID.name %}" role="button" class="btn btn-primary">Follow</a>
+                                    {% endif %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

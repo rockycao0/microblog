@@ -35,9 +35,7 @@ def main(request):
         content_list=User.objects.none()
         for x in star:
             content_list = content_list | x.owner.all()
-        if len(content_list)<10:
-            t = 10-len(content_list)
-            content_list = content_list | Content.objects.order_by()[:t]
+
         content_list = content_list.distinct()
         return render_to_response('blog.html',
                                   {'user': user, 'content_list': content_list.order_by('-id'), 'comm': cont})
@@ -75,7 +73,19 @@ def follow(request,favor):
     target = User.objects.get(name = favor)
     user.follow.add(target)
     target.follower.add(user)
-    return HttpResponse("well done")
+    return HttpResponseRedirect("/main/")
+
+def unfollow(request,favor):
+    try:
+        name = request.session.get('UID')
+    except:
+        HttpResponseRedirect("login.html")
+    user = User.objects.get(name=name)
+    target = User.objects.get(name = favor)
+    user.follow.remove(target)
+    target.follower.remove(user)
+    return HttpResponseRedirect("/main/")
+
 
 def comment(request,CID):
     try:
@@ -98,6 +108,11 @@ def comment(request,CID):
         return render_to_response("article.html", {'comm': com, 'content': content})
 
 def home(request,uid):
-    user = User.objects.get(id=uid)
-    content_list = user.owner.all()
-    return render_to_response('home.html', {'user': user, 'content_list': content_list.order_by('-id')})
+    try:
+        name = request.session.get('UID')
+        user = User.objects.get(name=name)
+    except:
+        user = User.objects.none()
+    host = User.objects.get(id=uid)
+    content_list = host.owner.all()
+    return render_to_response('home.html', {'user':user ,'host': host, 'content_list': content_list.order_by('-id')})
