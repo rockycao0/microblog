@@ -56,7 +56,6 @@ def hot(request):
         return render_to_response('hot.html', {'content_list': content_list})
 
 
-
 def up(request,CID):
     try:
         name = request.session.get('UID')
@@ -64,8 +63,10 @@ def up(request,CID):
         return HttpResponseRedirect("Userlogin.html")
     user = User.objects.get(name=name)
     content =  Content.objects.get(id= CID)
-    content.UP.add(user)
+    if content.UID!=user:
+        content.UP.add(user)
     return HttpResponseRedirect(request.session['frompage'])
+
 
 def follow(request,favor):
     try:
@@ -77,6 +78,7 @@ def follow(request,favor):
     user.follow.add(target)
     target.follower.add(user)
     return HttpResponseRedirect(request.session['frompage'])
+
 
 def unfollow(request,favor):
     try:
@@ -112,6 +114,7 @@ def comment(request,CID):
         com = comm()
         return render_to_response("article.html", {'comm': com, 'content': content, 'user': user})
 
+
 def home(request,uid):
     try:
         name = request.session.get('UID')
@@ -122,3 +125,33 @@ def home(request,uid):
     host = User.objects.get(id=uid)
     content_list = host.owner.all()
     return render_to_response('home.html', {'user': user, 'host': host, 'content_list': content_list.order_by('-id')})
+
+
+def delete(request, CID):
+    try:
+        name = request.session.get('UID')
+    except:
+        HttpResponseRedirect("login.html")
+    content = Content.objects.get(id=CID)
+    user = User.objects.get(name=name)
+    if user==content.UID:
+        content.delete()
+    return HttpResponseRedirect(request.session['frompage'])
+
+
+def search(request):
+    type = 'search'
+    text = request.GET['text']
+    content_list=[]
+    try:
+        name = request.session.get('UID')
+        user = User.objects.get(name=name)
+    except:
+        user = User.objects.none
+
+    for content in Content.objects.all():
+        if content.text.startswith(text) or content.UID.name == text:
+            content_list.append(content)
+
+    return render_to_response('blog.html', {'content_list': content_list, 'user': user, 'type': type, 'text':text})
+

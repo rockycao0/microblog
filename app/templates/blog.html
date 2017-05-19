@@ -42,26 +42,25 @@
                     <a href="{% url 'hot' %}"><i class="fa fa-star"></i> <span class="nav-label">热门</span> <span class="label label-warning pull-right">NEW</span></a>
                 </li>
             </ul>
-
         </div>
-    </nav>
+        </nav>
         <div id="page-wrapper" class="gray-bg">
         <div class="row border-bottom">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
-            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="blog.html#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" action="../../inspinia/search_results.html">
+            <button class="navbar-minimalize minimalize-styl-2 btn btn-primary "><i class="fa fa-bars"></i> </button>
+            <form role="search" class="navbar-form-custom" action="{% url 'search' %} ">
                 <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="text" id="top-search">
                 </div>
             </form>
         </div>
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <span class="m-r-sm text-muted welcome-message">microblog</span>
+                    <span class="m-r-sm text-muted welcome-message"><a href="/main/">microblog</a></span>
                 </li>
                 <li>
-                    <a href="../../login">
+                    <a href="/login">
                         {% if user %}
                         <i class="fa fa-sign-out"></i> Log out
                         {% else %}
@@ -74,15 +73,23 @@
         </nav>
         </div>
             <div class="row wrapper border-bottom white-bg page-heading">
+                {% ifequal type 'search' %}
+                <div class="col-lg-10">
+                    <h2>{{text}}的搜索结果</h2>
+                </div>
+                {% else %}
                 <div class="col-lg-10">
                     <h2>首页</h2>
                 </div>
+                {% endifequal %}
                 <div class="col-lg-2">
-
                 </div>
             </div>
+
 <!-- target 1 -->
         <div class="wrapper wrapper-content  animated fadeInRight blog">
+            {% ifequal type 'search' %}
+            {% else %}
             <div class="row">
                 <div class="ibox">
                 <div class="col-md-12-column">
@@ -90,10 +97,11 @@
                         {% for field in comm %}
                         {{field}}
                         {% endfor %}
-                        <div class="text-right"><button type="submit" class="btn btn-primary block m-b">发布</button></div>
+                        <div ><button type="submit" class="btn btn-primary block m-b">发布</button></div>
                     </form>
                 </div></div>
             </div>
+            {% endifequal %}
             <div class="row">
                 {% for content in content_list %}
                 <div class="ibox">
@@ -109,11 +117,12 @@
                                 <div class="text-right">
                                     {% if user %}
                                     {% ifequal user content.UID %}
+                                        <button type="button" class="btn btn-danger"><a href="{% url 'delete_link' content.id %}">Delete</a></button>
                                     {%else %}
                                     {% if content.UID in user.follow.all %}
                                         <button type="button" class="btn btn-warning"><a href="{% url 'unfollow_link' content.UID.name %}">UnFollow</a></button>
                                     {% else %}
-                                        <button type="button" class="btn btn-success"><a href="{% url 'follow_link' content.UID.name %}">Follow</a></button>
+                                        <button type="button" class="btn btn-primary"><a href="{% url 'follow_link' content.UID.name %}">Follow</a></button>
                                     {% endif %}
                                     {% endifequal %}
                                     {% endif %}
@@ -128,7 +137,11 @@
                         </p>
                         <div class="row">
                             <div class="col-md-6">
+                                {% ifequal user content.UID %}
+                                <i class="fa fa-eye">赞 {{ content.UP.count }}</i>
+                                {% else %}
                                 <i class="fa fa-eye"><a href="{% url 'up_link' content.id %}" > 赞 {{ content.UP.count }}</a></i>
+                                {% endifequal %}
                             </div>
                             <div class="col-md-6">
                                 <div class="text-right">
@@ -144,12 +157,7 @@
 
         </div>
         <div class="footer">
-            <div class="pull-right">
-                10GB of <strong>250GB</strong> Free.
-            </div>
-            <div>
-                <strong>Copyright</strong> Example Company &copy; 2014-2015
-            </div>
+            <p>work bu team</p>
         </div>
 
         </div>

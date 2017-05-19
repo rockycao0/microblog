@@ -15,8 +15,131 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <body>
+    <div id="wrapper">
 
-    <div class="container">
+        <nav class="navbar-default navbar-static-side"-- role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <h1 style="color:white">{{host.name}}</h1>
+                    </div>
+                    <div >
+                            {% if user %}
+                                    {% ifequal user host %}
+                                        <button type="button" class="btn btn-danger"><a>setting</a></button>
+                                    {%else %}
+                                    {% if host in user.follow.all %}
+                                        <button type="button" class="btn btn-warning"><a href="{% url 'unfollow_link' host.name %}">UnFollow</a></button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-success"><a href="{% url 'follow_link' host.name %}">Follow</a></button>
+                                    {% endif %}
+                                    {% endifequal %}
+                            {% endif %}
+                </div>
+                </li>
+                <div class="ibox"><h3 style="color:white">关注列表</h3></div></li>
+                {% for people in host.follow.all %}
+                {% ifequal people host %}
+                {% else %}
+                <li><div class="ibox">
+                        <a href="{% url 'home' people.id %}" class="btn-link"><h4 style="color:white">{{people.name}}</h4></a>
+                </div></li>
+                {% endifequal %}
+                {% endfor %}
+            </ul>
+
+        </div>
+        </nav>
+        <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button class="navbar-minimalize minimalize-styl-2 btn btn-primary "><i class="fa fa-bars"></i> </button>
+            <form role="search" class="navbar-form-custom" action="{% url 'search' %} ">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="text" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message"><a href="/main/">microblog</a></span>
+                </li>
+                <li>
+                    <a href="../../login">
+                        {% if user %}
+                        <i class="fa fa-sign-out"></i> Log out
+                        {% else %}
+                        <i class="fa fa-sign-in"></i> Log in
+                        {% endif %}
+                    </a>
+                </li>
+
+            </ul>
+
+
+        </nav>
+        </div>
+<!-- target 1 -->
+        <div class="wrapper wrapper-content  animated fadeInRight blog">
+            <div class="row">
+                {% for content in content_list %}
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-6 column">
+                                <a href="{% url 'home' content.UID.id %}" class="btn-link">
+                                    <h2><strong>
+                                        {{content.UID.name}}
+                                    </strong></h2></a>
+                            </div>
+                            <div class="col-md-6 column">
+                                <div class="text-right">
+                                    {% ifequal user host %}
+                                        <button type="button" class="btn btn-danger"><a href="{% url 'delete_link' content.id %}">Delete</a></button>
+                                    {% endifequal %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="small m-b-xs">
+                            <span class="text-muted"><i class="fa fa-clock-o"></i> {{ content.date }}</span>
+                        </div>
+                        <p>
+                            {{content.text}}
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <i class="fa fa-eye"><a href="{% url 'up_link' content.id %}" > 赞 {{ content.UP.count }}</a></i>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-right">
+                                    <div> <i class="fa fa-comments-o"> <a href="{% url 'comment_link' content.id %}",target = "_blank">评论 {{ content.owner.count }}</a></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <div ><ul>
+                                    {% for comm in content.owner.all %}
+                                    <div class="ibox">
+                                    <div class="col-md-8"><li role="presentation">
+                                    <p> {{ comm.text }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>{{ comm.UID.name }}</p>
+                                    </div></li></div>
+                                    {% endfor %}
+                                </ul></div>
+                            </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        </div>
+        </div>
+    <!--<div class="container">
         <div class="col-md-12 column">
 
         </div>
@@ -104,19 +227,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 column">
-                <h3 style="color:white">关注列表</h3>
-                {% for people in host.follow.all %}
-                {% ifequal people host %}
-                {% else %}
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <a href="{% url 'home' people.id %}" class="btn-link"><h3>{{people.name}}</h3></a>
-                    </div></div>
-                {% endifequal %}
-                {% endfor %}
-            </div>
+
         </div>
-</div>
+</div>-->
 </body>
 </html>
