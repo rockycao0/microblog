@@ -14,13 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
     
 """
+# 绝不要在发布前做重大更改！！！
 
-from django.conf.urls import handler404, handler500
 from django.conf.urls import url
 from django.contrib import admin
 from account.views import register, login
-from app.views import main, up, follow, comment, home, hot, unfollow, delete, search, page_not_found
-
+from app.views import main, up, follow, comment, home, hot, unfollow, delete, search
+from django.conf.urls import static
+from django.conf import settings
+from django.views.static import serve
 
 
 urlpatterns = [
@@ -37,5 +39,3 @@ urlpatterns = [
     url(r'^(?P<CID>\d+)/delete/$', delete, name='delete_link'),
     url(r'^search', search,name='search'),
 ]
-handler404 = page_not_found   #handler404 = "你的app.views.函数名"
-handler500 = page_not_found

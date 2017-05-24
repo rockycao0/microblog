@@ -154,6 +154,3 @@ def search(request):
             content_list.append(content)
 
     return render_to_response('blog.html', {'content_list': content_list, 'user': user, 'type': type, 'text':text})
-
-def page_not_found (request):
-    return render(request, "404.html")
