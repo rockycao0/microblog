@@ -19,4 +19,8 @@
 * 搜索
 
 
-
+### 支持和环境
+python 3.6+
+django 1.11
+bootstrap2
+inspire

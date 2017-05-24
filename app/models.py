@@ -4,7 +4,7 @@ from account.models import User
 
 
 class Content(models.Model):
-    text = models.CharField(max_length=140)
+    text = models.CharField(max_length=139)
     date = models.DateField(auto_now_add=True)
     up_num = models.IntegerField(default=0)
     UID = models.ForeignKey('account.User',on_delete=models.CASCADE,related_name='owner')

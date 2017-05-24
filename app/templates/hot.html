@@ -39,7 +39,7 @@
                     <a href="../../main"><i class="fa fa-smile-o"></i> <span class="nav-label">我的首页 </span><span class="label label-warning pull-right"></span></a>
                 </li>
                 <li class="landing_link">
-                    <a target="_blank" href="../../inspinia/landing.html"><i class="fa fa-star"></i> <span class="nav-label">热门</span> <span class="label label-warning pull-right">NEW</span></a>
+                    <a href="/hot/"><i class="fa fa-star"></i> <span class="nav-label">热门</span> <span class="label label-warning pull-right">NEW</span></a>
                 </li>
             </ul>
 
@@ -111,6 +111,9 @@
                         <div class="small m-b-xs">
                             <span class="text-muted"><i class="fa fa-clock-o"></i> {{ content.date }}</span>
                         </div>
+                        <p>
+                            {{content.text}}
+                        </p>
                         <div class="row">
                             <div class="col-md-6">
                                 <i class="fa fa-eye"><a href="{% url 'up_link' content.id %}" > 赞 {{ content.UP.count }}</a></i>

@@ -7,9 +7,9 @@ from .models import Content, Comment
 
 
 class blog(forms.Form):
-    text = forms.CharField(label='正文',max_length=140, widget=forms.Textarea(attrs={'style': 'height: 200px;width:800px'}))
+    text = forms.CharField(label='正文',max_length=139, widget=forms.Textarea(attrs={'style': 'height: 200px;width:800px'}))
 class comm(forms.Form):
-    text = forms.CharField(label='正文',max_length=140, widget=forms.Textarea(attrs={'style': 'height: 50px;width:800px'}))
+    text = forms.CharField(label='正文',max_length=100, widget=forms.Textarea(attrs={'style': 'height: 50px;width:800px'}))
 
 
 def main(request):
@@ -150,8 +150,10 @@ def search(request):
         user = User.objects.none
 
     for content in Content.objects.all():
-        if content.text.startswith(text) or content.UID.name == text:
+        if (content.text.find(text) or (content.UID.name == text))>= 0 :
             content_list.append(content)
 
     return render_to_response('blog.html', {'content_list': content_list, 'user': user, 'type': type, 'text':text})
 
+def page_not_found (request):
+    return render(request, "404.html")

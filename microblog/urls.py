@@ -12,11 +12,16 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
+    
 """
+
+from django.conf.urls import handler404, handler500
 from django.conf.urls import url
 from django.contrib import admin
 from account.views import register, login
-from app.views import main, up, follow, comment, home, hot, unfollow, delete, search
+from app.views import main, up, follow, comment, home, hot, unfollow, delete, search, page_not_found
+
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -30,5 +35,7 @@ urlpatterns = [
     url(r'^hot/', hot, name='hot'),
     url(r'^(?P<favor>\w+)/un favor/$', unfollow, name='unfollow_link'),
     url(r'^(?P<CID>\d+)/delete/$', delete, name='delete_link'),
-    url(r'^search', search,name='search')
+    url(r'^search', search,name='search'),
 ]
+handler404 = page_not_found   #handler404 = "你的app.views.函数名"
+handler500 = page_not_found
